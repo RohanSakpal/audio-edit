@@ -1,0 +1,20 @@
+<input type="file" (change)="onFilesSelected($event)" accept="audio/mp3" multiple />
+
+<div *ngFor="let file of files; let i=index">
+    <span> {{file.name}}</span>
+    <button (click)="editAudio(i)">Edit</button>
+</div>
+
+<h3>Range Slider</h3>
+<!-- <mat-slider [min]="startPoint" step="1" [max]="endPoint" discrete="true" showTickMarks="true">
+    <input matSliderStartThumb [(ngModel)]="startPoint">
+    <input matSliderEndThumb [(ngModel)]="endPoint">
+</mat-slider> -->
+
+<mat-slider *ngIf="endPoint" [min]="startPoint" [step]="1" [max]="endPoint" [discrete]="true" [showTickMarks]="true">
+    <input matSliderStartThumb [(ngModel)]="startValue">
+    <input matSliderEndThumb [(ngModel)]="endValue">
+</mat-slider>
+<br>
+<label>selected slider Start value in {{startValue}}</label><br>
+<label>selected slider End value in {{endValue}}</label>

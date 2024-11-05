@@ -1,0 +1,18 @@
+<div>
+    <input type="file" (change)="onFilesSelected($event)" multiple />
+    <div *ngFor="let file of selectedFiles; let i = index">
+        <label>{{ file.name }}:</label>
+        <input type="number" [(ngModel)]="trimStart[i]" placeholder="Start (in seconds)">
+        <input type="number" [(ngModel)]="trimEnd[i]" placeholder="End (in seconds)">
+        <button (click)="setTrimData(i)">Add Trim</button>
+      </div>
+    <button (click)="mergeFiles()" [disabled]="isLoading">Merge Files</button>
+  
+    <div *ngIf="isLoading">Merging files, please wait...</div>
+  
+    <audio *ngIf="mergedAudioUrl" controls>
+      <source [src]="mergedAudioUrl" type="audio/mpeg" />
+      Your browser does not support the audio element.
+    </audio>
+  </div>
+  

@@ -1,0 +1,11 @@
+<div>
+  <input type="file" (change)="onFilesSelected($event)" multiple />
+  <button (click)="mergeFiles()" [disabled]="isLoading">Merge Files</button>
+
+  <div *ngIf="isLoading">Merging files, please wait...</div>
+
+  <audio *ngIf="mergedAudioUrl" controls>
+    <source [src]="mergedAudioUrl" type="audio/mpeg" />
+    Your browser does not support the audio element.
+  </audio>
+</div>

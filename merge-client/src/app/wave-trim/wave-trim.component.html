@@ -1,0 +1,21 @@
+<input type="file" (change)="onFilesSelected($event)" accept="audio/mp3" multiple />
+<button (click)="mergeFiles()">Merge Audios</button>
+
+<div *ngIf="isLoading">Merging files, please wait...</div>
+
+<!-- Iterate over audioFiles array to create UI for each audio -->
+<div *ngFor="let audioFile of audioFiles; let i = index" class="audio-item">
+    <h3>{{audioFile.name}}</h3>
+  <!-- Button for Play/Pause -->
+  <button [attr.data-index]="i" (click)="togglePlayPause(i, playPauseButton)" #playPauseButton>
+    Play
+  </button>
+
+  <!-- Waveform Container -->
+  <div id="waveform-{{i}}" #waveform></div>
+</div>
+
+<audio *ngIf="mergedAudioUrl" controls>
+    <source [src]="mergedAudioUrl" type="audio/mpeg" />
+    Your browser does not support the audio element.
+  </audio>

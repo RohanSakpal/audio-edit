@@ -32,6 +32,7 @@
     "reflect-metadata": "^0.2.0",
     "rxjs": "^7.8.1",
     "uuid": "^11.0.2",
+    "wav": "^1.0.2",
     "waveform-data": "^4.5.0"
   },
   "devDependencies": {

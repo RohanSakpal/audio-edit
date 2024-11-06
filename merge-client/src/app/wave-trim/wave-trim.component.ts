@@ -92,13 +92,6 @@ export class WaveTrimComponent {
           });
         });
 
-        // const reader = new FileReader();
-        // reader.onload = () => {
-        //   const arrayBuffer = reader.result as ArrayBuffer;
-        //   const blob = new Blob([arrayBuffer], { type: 'audio/mp3' });
-        //   wavesurfer.loadBlob(blob);
-        // };
-        // reader.readAsArrayBuffer(file);
         const fileURL = URL.createObjectURL(file);
         wavesurfer.load(fileURL);
 

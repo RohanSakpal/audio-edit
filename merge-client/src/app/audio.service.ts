@@ -13,6 +13,8 @@ export class AudioService {
 
   private audioURLApi = 'http://localhost:3000/audio-link/multiple';
 
+  private audioURLPeaksApi = 'http://localhost:3000/audio-link/upload-and-peaks';
+
   constructor(private http: HttpClient) { }
 
   mergeAudioFiles(files: File[]): Promise<Blob> {
@@ -64,5 +66,9 @@ export class AudioService {
 
   audioURL(files:any):Observable<any> {
     return this.http.post(this.audioURLApi,files);
+  }
+
+  audioURLPeaks(files:any):Observable<any> {
+    return this.http.post(this.audioURLPeaksApi,files);
   }
 }

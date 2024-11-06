@@ -7,7 +7,7 @@ import { AudioLinkComponent } from './audio-link/audio-link.component';
 import { OldMethodComponent } from './old-method/old-method.component';
 
 const routes: Routes = [
-  {path:'',redirectTo:'old-method',pathMatch:'full'},
+  {path:'',redirectTo:'audio-link',pathMatch:'full'},
   {path:'merge',component:AudioComponent},
   {path:'trim-merge',component:TrimMergeComponent},
   {path:'wave-trim',component:WaveTrimComponent},

@@ -30,21 +30,21 @@ export class AudioLinkController {
     return { files: fileUrls };
   }
 
-  @Post('peaks')
-  @UseInterceptors(FilesInterceptor('files')) // Enable multiple file uploads
-  async getAudioPeaks(@UploadedFiles() files: Express.Multer.File[]) {
-    const results = await Promise.all(
-      files.map(async (file) => {
-        const peaks = await this.fileUploadService.generatePeaksFromBuffer(file.buffer);
-        return {
-          fileName: file.originalname,
-          peaks,
-        };
-      }),
-    );
+  // @Post('peaks')
+  // @UseInterceptors(FilesInterceptor('files')) // Enable multiple file uploads
+  // async getAudioPeaks(@UploadedFiles() files: Express.Multer.File[]) {
+  //   const results = await Promise.all(
+  //     files.map(async (file) => {
+  //       const peaks = await this.fileUploadService.generatePeaksFromBuffer(file.buffer);
+  //       return {
+  //         fileName: file.originalname,
+  //         peaks,
+  //       };
+  //     }),
+  //   );
 
-    return results;
-  }
+  //   return results;
+  // }
 
   @Post('upload-and-peaks')
   @UseInterceptors(
@@ -59,13 +59,19 @@ export class AudioLinkController {
     }),
   )
   async uploadFilesAndGeneratePeaks(@UploadedFiles() files: Express.Multer.File[]) {
+    // Clear the uploads folder before processing new files, if needed
+    // this.fileUploadService.clearUploadFolder();
+
+    // Process each file: store it and generate peaks
     const results = await Promise.all(
       files.map(async (file) => {
         // Generate file URL
-        const fileUrl = `http://localhost:3000/uploads/${file.filename}`; // Adjust URL as needed
+        const fileUrl = `http://localhost:3000/uploads/${file.filename}`;
 
-        // Generate peaks from buffer
-        const peaks = await this.fileUploadService.generatePeaksFromBuffer(file.buffer);
+        // Generate peaks from file path
+        const peaks = await this.fileUploadService.generatePeaksFromFilePath(
+          path.join(this.fileUploadService.uploadDirectory, file.filename),
+        );
 
         return {
           fileUrl,

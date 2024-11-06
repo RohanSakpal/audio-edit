@@ -41,7 +41,7 @@ export class AudioLinkComponent {
       const formData = new FormData();
       this.files.forEach((file: File) => formData.append('files', file, file.name));
 
-      this.audioMergeService.audioURL(formData).subscribe((res:any)=> {
+      this.audioMergeService.audioURLPeaks(formData).subscribe((res:any)=> {
         this.url = res.files;
         this.createWave();
       })
@@ -61,13 +61,13 @@ export class AudioLinkComponent {
     this.url.forEach((filep, index) => {
       this.regions.push(RegionsPlugin.create());
   
-      this.urlToFile(filep).then((fileRes) => {
+      this.urlToFile(filep.fileUrl).then((fileRes) => {
         this.audioFiles.push({ 
           wavesurfer: null!, 
           isPlaying: false,
-          name: fileRes.name,
+          name: filep.fileName,
           file: fileRes,
-          url: filep,
+          url: filep.fileUrl,
         });
         
         this.trimData.push([]);
@@ -83,7 +83,8 @@ export class AudioLinkComponent {
           backend: 'MediaElement',
           plugins: [this.regions[index]],
           height: 50,
-          url: filep
+          url: filep.fileUrl,
+          peaks: filep.peaks
         });
   
         wavesurfer.on('decode', () => {
@@ -156,30 +157,27 @@ export class AudioLinkComponent {
   togglePlayPause(index: number, button: HTMLElement): void {
     const audioFile = this.audioFiles[index];
   
-    // If there's currently a playing audio, pause it and update its button text
     if (this.currentPlayingIndex !== null && this.currentPlayingIndex !== index) {
       const currentlyPlayingFile = this.audioFiles[this.currentPlayingIndex];
       currentlyPlayingFile.wavesurfer.pause();
       currentlyPlayingFile.isPlaying = false;
   
-      // Update the button of the previously playing audio to show 'Play'
       const prevButton = document.querySelector(`[data-index="${this.currentPlayingIndex}"]`) as HTMLElement;
       if (prevButton) {
-        prevButton.textContent = 'Play';  // Update the text of the previous button
+        prevButton.textContent = 'Play'; 
       }
     }
   
-    // Toggle play/pause for the clicked audio
     if (audioFile.isPlaying) {
       audioFile.wavesurfer.pause();
-      button.textContent = 'Play';  // Update the button text when pausing
+      button.textContent = 'Play'; 
     } else {
       audioFile.wavesurfer.play();
-      button.textContent = 'Pause';  // Update the button text when playing
-      this.currentPlayingIndex = index;  // Update the currently playing audio index
+      button.textContent = 'Pause';
+      this.currentPlayingIndex = index;
     }
   
-    audioFile.isPlaying = !audioFile.isPlaying;  // Toggle the playing state
+    audioFile.isPlaying = !audioFile.isPlaying;
   }
 
   async mergeFiles(): Promise<void> {

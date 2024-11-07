@@ -102,22 +102,30 @@ export class AudioLinkService {
             });
 
             reader.on('end', async () => {
-              try {
-                await unlinkAsync(outputWavPath); // Delete file after it’s closed
-              } catch (unlinkError) {
-                console.error('Error deleting temporary file:', unlinkError.message);
-              }
-              resolve(peaks);
+              fileStream.close(); // Ensure fileStream is fully closed
+              
+              // Add a small delay before attempting to delete
+              setTimeout(async () => {
+                try {
+                  await unlinkAsync(outputWavPath); // Delete the file after it's closed and delay
+                } catch (unlinkError) {
+                  console.error('Error deleting temporary file:', unlinkError.message);
+                }
+                resolve(peaks);
+              }, 100); // 100ms delay to ensure OS releases file lock
             });
           });
 
           reader.on('error', async (error) => {
-            try {
-              await unlinkAsync(outputWavPath);
-            } catch (unlinkError) {
-              console.error('Error deleting temporary file on error:', unlinkError.message);
-            }
-            reject(error);
+            fileStream.close(); // Close the file stream on error as well
+            setTimeout(async () => {
+              try {
+                await unlinkAsync(outputWavPath);
+              } catch (unlinkError) {
+                console.error('Error deleting temporary file on error:', unlinkError.message);
+              }
+              reject(error);
+            }, 100); // 100ms delay before deleting
           });
 
           // Pipe the WAV file data to the reader

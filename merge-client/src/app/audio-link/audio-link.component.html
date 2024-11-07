@@ -1,7 +1,7 @@
 <input type="file" (change)="onFilesSelected($event)" accept="audio/mp3" multiple />
 <button (click)="mergeFiles()">Merge Audios</button>
 
-<div *ngIf="isLoading">Merging files, please wait...</div>
+<div *ngIf="isLoading">{{msg}}</div>
 
 <!-- Iterate over audioFiles array to create UI for each audio -->
 <div *ngFor="let audioFile of audioFiles; let i = index" class="audio-item">
